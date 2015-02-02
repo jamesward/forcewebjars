@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Salesforce Metadata Merger</title>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+        <link rel="stylesheet" type="text/css" href="@StaticWebJarAssets.url(WebJarAssets.locate("css/bootstrap.min.css"))">
+        <style>
+            body {
+                padding-top: 70px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Force WebJars</a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <a href="@routes.Application.oauthLoginProd()" class="btn btn-default">Login via Salesforce - Normal Instance</a>
+            <a href="@routes.Application.oauthLoginSandbox()" class="btn btn-default">Login via Salesforce - Sandbox Instance</a>
+        </div>
+    </body>
+</html>

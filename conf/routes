@@ -1,0 +1,26 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                              controllers.Application.login
+GET         /app                           controllers.Application.app
+
+# JS API
+GET         /org/userinfo                  controllers.Application.orgUserInfo
+GET         /org/webjars                   controllers.Application.orgWebJars
+POST        /org/webjars                   controllers.Application.orgWebJarsCreate
+
+# OAuth
+GET         /_login_prod                   controllers.Application.oauthLoginProd()
+GET         /_login_sandbox                controllers.Application.oauthLoginSandbox()
+GET         /_oauth_callback               controllers.Application.oauthCallback(code: String)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /vassets/*file                 controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                  controllers.Assets.at(path="/public", file)
+
+
+# WebJars
+GET         /webjars/*file                 controllers.WebJarAssets.at(file)

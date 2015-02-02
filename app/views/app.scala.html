@@ -1,0 +1,113 @@
+@(authInfo: utils.AuthInfo)
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+    <head>
+        <title>Salesforce Metadata Merger</title>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/ng-cloak.css")">
+        <script>
+        var require = {
+            callback: function() {
+            // default requirejs configs
+                @play.api.Play.current.configuration.getString("assets.url").fold {
+                    @for(webJarJson <- org.webjars.RequireJS.getSetupJson(StaticWebJarAssets.url("")).values()) {
+                        requirejs.config(@Html(webJarJson.toString));
+                    }
+                } { assetsUrl =>
+                    @for(webJarJson <- org.webjars.RequireJS.getSetupJson(StaticWebJarAssets.url(""), routes.WebJarAssets.at("").url).values()) {
+                        requirejs.config(@Html(webJarJson.toString));
+                    }
+                }
+
+                requirejs.config({
+                    "paths": {
+                        "app-css": "@routes.Assets.versioned("stylesheets/app")"
+                    },
+                    "shim": {
+                        "app-css": ["bootstrap-css"],
+                        "angular": {
+                            "exports" : "angular",
+                            "deps": ["jquery"]
+                        }
+                    }
+                });
+            }
+        };
+
+        var idUrl = "@authInfo.idUrl";
+        var accessToken = "@authInfo.accessToken";
+        var refreshToken = "@authInfo.refreshToken";
+        var instanceUrl = "@authInfo.instanceUrl";
+        </script>
+        <script data-main="@routes.Assets.versioned("javascripts/app.js")" src="@StaticWebJarAssets.url(WebJarAssets.locate("require.min.js"))"></script>
+    </head>
+    <body class="ng-cloak" ng-controller="AppController">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Force WebJars</a>
+                </div>
+                <div class="navbar-right">
+                    <a href="@routes.Application.login()" class="btn btn-default navbar-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" ng-show="userOrgInfo">
+            <div class="page-header">
+                <h1>
+                    {{userOrgInfo.Name}} {{userOrgInfo.username}} {{userOrgInfo.OrganizationType}}
+                        <a class="btn btn-default pull-right" target="_blank" ng-href="{{instanceUrl + '/apexpages/setup/listStaticResource.apexp'}}">
+                            <span class="glyphicon glyphicon-folder-open"></span>
+                            Static Resources
+                        </a>
+                    <a class="btn btn-default pull-right" target="_blank" ng-href="{{instanceUrl + '/_ui/common/apex/debug/ApexCSIPage'}}">
+                        <span class="glyphicon glyphicon-wrench"></span>
+                        Dev Console
+                    </a>
+                </h1>
+            </div>
+            <form class="form-inline">
+                <div class="form-group">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <input class="form-control" type="text" ng-model="selectedInstallWebJar" placeholder="WebJar ID"
+                        typeahead="webJar as webJar.artifactId for webJar in allWebJars | filter:{name:$viewValue}"
+                        typeahead-editable="false" typeahead-loading="webJarsLoading">
+                    {{webJarId}}
+                </div>
+                <div class="form-group">
+                    <select id="webJarVersion" class="form-control" title="WebJar Version"
+                        ng-disabled="!selectedInstallWebJar" ng-model="selectedInstallWebJarVersion"
+                        ng-options="version.number for version in selectedInstallWebJar.versions">
+                        <option value="">WebJar Version</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default" ng-disabled="!selectedInstallWebJarVersion || !selectedInstallWebJar" ng-click="installWebJar(selectedInstallWebJar, selectedInstallWebJarVersion)">Install WebJar</button>
+            </form>
+            <div>
+                <h3>Installed WebJars</h3>
+                <accordion close-others="false">
+                    <accordion-group ng-repeat="webjar in webJars" is-open="webjar.isOpen">
+                        <accordion-heading>
+                            <span class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': webjar.isOpen, 'glyphicon-chevron-right': !webjar.isOpen}" ng-click="toggleWebJar(webjar)"></span>
+                            <span ng-click="toggleWebJar(webjar)">{{webjar.id}} {{webjar.version}}</span>
+                            <button class="btn btn-danger btn-xs pull-right" disabled>
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </accordion-heading>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>File</th>
+                                <th>Visualforce</th>
+                            </tr>
+                            <tr ng-repeat="file in webjar.files">
+                                <td>{{file}}</td>
+                                <td><code>{!URLFOR($Resource.{{webjar.sfname}},'{{file}}')}</code></td>
+                            </tr>
+                        </table>
+                    </accordion-group>
+                </accordion>
+            </div>
+        </div>
+    </body>
+</html>
