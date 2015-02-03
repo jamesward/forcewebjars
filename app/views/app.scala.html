@@ -21,7 +21,7 @@
 
                 requirejs.config({
                     "paths": {
-                        "app-css": "@routes.Assets.versioned("stylesheets/app")"
+                        "app-css": "@routes.Assets.versioned("stylesheets/app.css").toString().stripSuffix(".css")"
                     },
                     "shim": {
                         "app-css": ["bootstrap-css"],
