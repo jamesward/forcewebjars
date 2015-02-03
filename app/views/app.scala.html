@@ -43,7 +43,7 @@
     </head>
     <body class="ng-cloak" ng-controller="AppController">
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
+            <div>
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">Force WebJars</a>
                 </div>
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <div class="container" ng-show="userOrgInfo">
+        <div ng-show="userOrgInfo">
             <div class="page-header">
                 <h1>
                     {{userOrgInfo.Name}} {{userOrgInfo.username}} {{userOrgInfo.OrganizationType}}

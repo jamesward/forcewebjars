@@ -26,6 +26,8 @@ require([
         $http
           .post("/org/webjars", {id: webJar.artifactId, version: version.number}, httpConfig)
           .success(function(data) {
+            $scope.selectedInstallWebJar = null;
+            $scope.selectedInstallWebJarVersion = null;
             getOrgWebJars();
           })
           .error(function(data) {
@@ -38,7 +40,7 @@ require([
         if (webJar.files === undefined) {
           // fetch the files
           $http
-            .get("http://www.webjars.org/listfiles/" + webJar.id + "/" + webJar.version)
+            .get("https://webjars.herokuapp.com/listfiles/" + webJar.id + "/" + webJar.version)
             .success(function(data) {
               webJar.files = data;
             })
@@ -63,7 +65,7 @@ require([
 
       // get All WebJars
       $http
-        .get("http://www.webjars.org/all")
+        .get("https://webjars.herokuapp.com/all")
         .success(function(data) {
           $scope.allWebJars = data;
           $scope.webJarsLoading = false;
