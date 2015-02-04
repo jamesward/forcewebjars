@@ -91,9 +91,11 @@
                         <accordion-heading>
                             <span class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': webjar.isOpen, 'glyphicon-chevron-right': !webjar.isOpen}" ng-click="toggleWebJar(webjar)"></span>
                             <span ng-click="toggleWebJar(webjar)">{{webjar.id}} {{webjar.version}}</span>
+                            @*
                             <button class="btn btn-danger btn-xs pull-right" disabled>
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
+                            *@
                         </accordion-heading>
                         <table class="table table-bordered">
                             <tr>
