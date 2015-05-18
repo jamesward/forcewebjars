@@ -67,7 +67,11 @@ require([
       $http
         .get("https://webjars.herokuapp.com/all")
         .success(function(data) {
-          $scope.allWebJars = data;
+          var classicWebJars = data.filter(function(webJar) {
+            return webJar.groupId == "org.webjars";
+          });
+
+          $scope.allWebJars = classicWebJars;
           $scope.webJarsLoading = false;
         })
         .error(function(data) {
