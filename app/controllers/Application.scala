@@ -83,7 +83,7 @@ object Application extends Controller {
   def orgWebJarsCreate() = AuthInfoAction.async(parse.json) { request =>
     val webJarId = (request.body \ "id").as[String]
     val webJarVersion = (request.body \ "version").as[String]
-    val resourceUrl = s"http://repo1.maven.org/maven2/org/webjars/$webJarId/$webJarVersion/$webJarId-$webJarVersion.jar"
+    val resourceUrl = s"https://repo1.maven.org/maven2/org/webjars/$webJarId/$webJarVersion/$webJarId-$webJarVersion.jar"
 
     forceUtil.createResource(request.authInfo, webJarId, webJarVersion, resourceUrl).map { json =>
       Created(json)
